@@ -32,18 +32,18 @@ func _on_create_json_pressed():
 	var jsonDictionary =  {}
 	for i in range(0, connections.size()):
 		var id = graph.get_node(connections[i].from_node as NodePath).get_node('vBoxContainer/HBoxContainer/ID').value
-		if graph.get_node(connections[i].from_node).get_node('vBoxContainer/HBoxContainer/Type').get_selected_id() == "0":
+		if graph.get_node(connections[i].from_node as NodePath).get_node('vBoxContainer/HBoxContainer/Type').get_selected_id() == 0:
 			next_id = 0
-		if graph.get_node(connections[i].from_node).get_node('vBoxContainer/HBoxContainer/Type').get_selected_id() == "2":
+		if graph.get_node(connections[i].from_node as NodePath).get_node('vBoxContainer/HBoxContainer/Type').get_selected_id() == 2:
 			print("Response")
-			print(graph.get_node(connections[i].to_node).get_node('vBoxContainer/VBoxContainer/Dialogue').text)
+			print(graph.get_node(connections[i].to_node as NodePath).get_node('vBoxContainer/VBoxContainer/Dialogue').text)
 		else:
-			dialogue = graph.get_node(connections[i].from_node).get_node('vBoxContainer/VBoxContainer/Dialogue').text			
-			next_id = graph.get_node(connections[i].to).get_node('vBoxContainer/HBoxContainer/ID').value
+			dialogue = graph.get_node(connections[i].from_node as NodePath).get_node('vBoxContainer/VBoxContainer/Dialogue').text
+			next_id = graph.get_node(connections[i].to_node as NodePath).get_node('vBoxContainer/HBoxContainer/ID').value
 
 func _on_add_node_pressed(node_type, offset_position, auto_connect):
 	var new_node = dialogue_node.instantiate()
-	new_node.position = initial_position
+	new_node.position = initial_position * node_index
 	new_node.node_id = node_index
 	new_node.type = node_type
 	$GraphEdit.add_child(new_node)
