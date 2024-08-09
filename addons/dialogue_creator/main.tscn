@@ -22,23 +22,57 @@ right_disconnects = true
 
 [node name="AddNode" type="Button" parent="."]
 layout_mode = 0
-offset_left = 19.0
-offset_top = 6.0
-offset_right = 81.0
-offset_bottom = 38.0
-text = "Add Node"
+offset_left = 821.0
+offset_top = 9.0
+offset_right = 945.0
+offset_bottom = 41.0
+text = "Add New Node"
+
+[node name="ResetCounter" type="Button" parent="."]
+layout_mode = 0
+offset_left = 958.0
+offset_top = 9.0
+offset_right = 1097.0
+offset_bottom = 41.0
+text = "Reset ID Counter"
+
+[node name="LoadJson" type="Button" parent="."]
+offset_left = 555.0
+offset_top = 9.0
+offset_right = 657.0
+offset_bottom = 41.0
+text = "Load JSON"
 
 [node name="CreateJson" type="Button" parent="."]
 layout_mode = 0
-offset_left = 135.0
-offset_top = 5.0
-offset_right = 237.0
-offset_bottom = 37.0
+offset_left = 438.0
+offset_top = 9.0
+offset_right = 540.0
+offset_bottom = 41.0
 text = "Create JSON"
+
+[node name="FileName" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 151.0
+offset_top = 9.0
+offset_right = 426.0
+offset_bottom = 40.0
+placeholder_text = "Enter File/Character Name Here..."
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 147.0
+offset_bottom = 35.0
+text = "Character Name:
+"
 
 [connection signal="connection_drag_started" from="GraphEdit" to="." method="_on_graph_edit_connection_drag_started"]
 [connection signal="connection_request" from="GraphEdit" to="." method="_on_graph_edit_connection_request"]
 [connection signal="connection_to_empty" from="GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]
 [connection signal="disconnection_request" from="GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
 [connection signal="pressed" from="AddNode" to="." method="_on_add_node_pressed" binds= [1, Vector2(20, 20), false]]
+[connection signal="pressed" from="ResetCounter" to="." method="_on_reset_counter_pressed"]
+[connection signal="pressed" from="LoadJson" to="." method="_on_load_json_pressed"]
 [connection signal="pressed" from="CreateJson" to="." method="_on_create_json_pressed"]
