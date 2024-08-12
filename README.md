@@ -1,11 +1,13 @@
 # Dialogue-Creator
+> [!IMPORTANT]
+> **This project is still under construction and may change between versions**
 
 Used for personal projects mainly.
 
 Create dialogue in JSON format per character.
 
 Example:
-
+```
 {
 	"1": {
 		"NextId": 2,
@@ -38,3 +40,4 @@ Example:
 		"Responses": null		
 	}
 }
+```
