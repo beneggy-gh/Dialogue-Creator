@@ -1,6 +1,24 @@
 {
 	"1": {
+		"next_id": 3,
+		"responses": [
+			{
+				"next_id": 2,
+				"required_item_name": "",
+				"requires_item": false,
+				"text": "Response 1"
+			},
+			{
+				"next_id": 3,
+				"required_item_name": "",
+				"requires_item": false,
+				"text": "Response 2"
+			}
+		],
+		"text": "First message"
+	},
+	"4": {
 		"next_id": 0,
-		"text": "Test dialogue yay!"
+		"text": "Reply to Response 2"
 	}
 }

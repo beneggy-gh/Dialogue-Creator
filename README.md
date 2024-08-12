@@ -1,4 +1,4 @@
-# Dialogue-Creator
+# Dialogue-Creator - 0.2
 > [!IMPORTANT]
 > **This project is still under construction and may change between versions**
 
@@ -10,34 +10,26 @@ Example:
 ```
 {
 	"1": {
-		"NextId": 2,
-		"Text": "Hello Adventurer!",
-		"Responses": null
-	},
-	"2": {
-		"NextId": 0,
-		"Text": "What is your name?",
-		"Responses": [
+		"next_id": 3,
+		"responses": [
 			{
-				"Text": "I'm not telling you!",
-				"Type": {
-					"value__": 1
-				},
-				"NextId": 0
+				"next_id": 2,
+				"required_item_name": "",
+				"requires_item": false,
+				"text": "Response 1"
 			},
 			{
-				"Text": "My name is {PLAYER_NAME}",
-				"Type": {
-					"value__": 0
-				},
-				"NextId": 3
+				"next_id": 3,
+				"required_item_name": "",
+				"requires_item": false,
+				"text": "Response 2"
 			}
-		]
+		],
+		"text": "First message"
 	},
-	"3": {
-		"NextId": 0,
-		"Text": "Well met, {PLAYER_NAME}!",
-		"Responses": null		
+	"4": {
+		"next_id": 0,
+		"text": "Reply to Response 2"
 	}
 }
 ```

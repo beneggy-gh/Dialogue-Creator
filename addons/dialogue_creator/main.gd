@@ -64,15 +64,19 @@ func _on_create_json_pressed():
 		if to_node.get_node('VBoxContainer/IDTypeSection/Type').get_selected_id() == 2:
 			response_nodes.append(to_node)
 			for response_node in response_nodes:
-				var response:= DialogueResponse.new()
+				var response := DialogueResponse.new()
 				response.text = response_node.get_node('VBoxContainer/DialogueSection/Dialogue').text
 				response.next_id = response_node.get_node('VBoxContainer/IDTypeSection/ID').value
 				dialogue.responses.append(response.to_json_readable())
-			response_nodes.clear()
+			##response_nodes.clear()
+			print(dialogue.responses)
 		
 		dict[index] = dialogue.to_json_readable()
 
 	var json = JSON.new()
+	
+	for index in dict.keys():
+		print(dict[index])
 	
 	## Save Dialogue into JSON
 	var json_string = json.stringify(dict, "\t")
@@ -81,6 +85,7 @@ func _on_create_json_pressed():
 	
 	var file := FileAccess.open(filename, FileAccess.WRITE)
 	file.store_line(json_string)
+	file.close()
 
 func _on_add_node_pressed(node_type, offset_position, auto_connect):
 	var new_node = dialogue_node.instantiate()
@@ -92,13 +97,13 @@ func _on_add_node_pressed(node_type, offset_position, auto_connect):
 	var close_button : Button = new_node.get_node("Close")
 	close_button.pressed.connect(Callable(self, "_on_node_closed"))
 	var type_button : OptionButton = new_node.get_node("VBoxContainer/IDTypeSection/Type")
-	type_button.item_selected.connect(self.on_node_type_change.bind(new_node)) 
+	type_button.item_selected.connect(self._on_node_type_change.bind(new_node)) 
 	
 	## Finish off by adding and incrementing
 	$GraphEdit.add_child(new_node)
 	node_index += 1
 
-func _on_node_type_change(new_node):
+func _on_node_type_change(index, new_node):
 	var type = new_node.get_node("$VBoxContainer/IDTypeSection/Type").get_selected_id()
 	if type != 0:
 		new_node.node_id = node_index
