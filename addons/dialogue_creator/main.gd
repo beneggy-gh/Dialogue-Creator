@@ -5,7 +5,7 @@ var dialogue_node = preload("res://addons/dialogue_creator/Nodes/node.tscn")
 var option_button : OptionButton
 
 var initial_position = Vector2(40,40)
-@export var node_index = 1
+@onready var node_index = 1
 
 var lastSelectedNode
 var lastSelectedPort
@@ -26,6 +26,9 @@ func _process(delta):
 			option_button.queue_free()
 
 func _on_create_json_pressed():
+	if $FileName.text == null or $FileName.text == "":
+		printerr("Please enter a name for your dialogue file!")
+		return
 	var graph = $GraphEdit
 	var connections = graph.get_connection_list()
 	var response_nodes: Array
@@ -84,8 +87,25 @@ func _on_add_node_pressed(node_type, offset_position, auto_connect):
 	new_node.position = initial_position * node_index
 	new_node.node_id = node_index
 	new_node.type = node_type
+	
+	## Connect some buttons signals to some methods here
+	var close_button : Button = new_node.get_node("Close")
+	close_button.pressed.connect(Callable(self, "_on_node_closed"))
+	var type_button : OptionButton = new_node.get_node("VBoxContainer/IDTypeSection/Type")
+	type_button.item_selected.connect(self.on_node_type_change.bind(new_node)) 
+	
+	## Finish off by adding and incrementing
 	$GraphEdit.add_child(new_node)
 	node_index += 1
+
+func _on_node_type_change(new_node):
+	var type = new_node.get_node("$VBoxContainer/IDTypeSection/Type").get_selected_id()
+	if type != 0:
+		new_node.node_id = node_index
+		node_index += 1
+
+func _on_node_closed():
+	node_index -= 1
 
 func _on_new_option_focus_exited(button):
 	queue_free()
@@ -105,6 +125,8 @@ func _on_newnode_type_item_selected(node_type, release_position):
 	else:
 		new_node.position_offset.x += new_node.size.x + 100
 		new_node.position_offset.y += 100 * node_index
+		var close_button : Button = new_node.get_node("Close")
+		close_button.pressed.connect(Callable(self, "_on_node_closed"))
 		$GraphEdit.add_child(new_node)
 		$GraphEdit.connect_node(lastSelectedNode.name, lastSelectedPort, new_node.name, new_node.port)
 		option_button.queue_free()

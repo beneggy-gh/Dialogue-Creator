@@ -22,8 +22,6 @@ func _process(delta):
 	pass
 
 func _on_close_pressed():
-	var main = get_node("/root/Main/")
-	main.node_index -= 1
 	queue_free()
 
 func _on_type_item_selected(index):

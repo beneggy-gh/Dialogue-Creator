@@ -37,6 +37,7 @@ offset_bottom = 41.0
 text = "Reset ID Counter"
 
 [node name="LoadJson" type="Button" parent="."]
+layout_mode = 0
 offset_left = 555.0
 offset_top = 9.0
 offset_right = 657.0
