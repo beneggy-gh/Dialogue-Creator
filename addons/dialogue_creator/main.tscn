@@ -3,77 +3,135 @@
 [ext_resource type="Script" path="res://addons/dialogue_creator/main.gd" id="1_ekc1o"]
 
 [node name="Main" type="Control"]
+clip_contents = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_ekc1o")
 
-[node name="GraphEdit" type="GraphEdit" parent="."]
-clip_contents = false
-layout_mode = 0
-offset_top = 50.0
-offset_right = 1920.0
-offset_bottom = 970.0
-scroll_offset = Vector2(-500, -160)
-right_disconnects = true
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="AddNode" type="Button" parent="."]
-layout_mode = 0
-offset_left = 821.0
-offset_top = 9.0
-offset_right = 945.0
-offset_bottom = 41.0
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="AddNode" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
 text = "Add New Node"
 
-[node name="ResetCounter" type="Button" parent="."]
-layout_mode = 0
-offset_left = 958.0
-offset_top = 9.0
-offset_right = 1097.0
-offset_bottom = 41.0
+[node name="ResetCounter" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
 text = "Reset ID Counter"
 
-[node name="LoadJson" type="Button" parent="."]
-layout_mode = 0
-offset_left = 555.0
-offset_top = 9.0
-offset_right = 657.0
-offset_bottom = 41.0
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="LoadJson" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
 text = "Load JSON"
 
-[node name="CreateJson" type="Button" parent="."]
-layout_mode = 0
-offset_left = 438.0
-offset_top = 9.0
-offset_right = 540.0
-offset_bottom = 41.0
+[node name="CreateJson" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
 text = "Create JSON"
 
-[node name="FileName" type="LineEdit" parent="."]
-layout_mode = 0
-offset_left = 151.0
-offset_top = 9.0
-offset_right = 426.0
-offset_bottom = 40.0
-placeholder_text = "Enter File/Character Name Here..."
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 12.0
-offset_right = 147.0
-offset_bottom = 35.0
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
 text = "Character Name:
 "
 
-[connection signal="connection_drag_started" from="GraphEdit" to="." method="_on_graph_edit_connection_drag_started"]
-[connection signal="connection_request" from="GraphEdit" to="." method="_on_graph_edit_connection_request"]
-[connection signal="connection_to_empty" from="GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]
-[connection signal="disconnection_request" from="GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
-[connection signal="pressed" from="AddNode" to="." method="_on_add_node_pressed" binds= [1, Vector2(20, 20), false]]
-[connection signal="pressed" from="ResetCounter" to="." method="_on_reset_counter_pressed"]
-[connection signal="pressed" from="LoadJson" to="." method="_on_load_json_pressed"]
-[connection signal="pressed" from="CreateJson" to="." method="_on_create_json_pressed"]
+[node name="FileName" type="LineEdit" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter File/Character Name Here..."
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/PanelContainer2"]
+layout_mode = 2
+scroll_offset = Vector2(-10, -54)
+right_disconnects = true
+
+[node name="PopupPanel" type="PopupPanel" parent="."]
+title = "Error Message"
+initial_position = 1
+size = Vector2i(161, 100)
+visible = true
+unresizable = false
+borderless = false
+always_on_top = true
+extend_to_title = true
+
+[node name="ErrorPanel" type="PanelContainer" parent="PopupPanel"]
+clip_contents = true
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -96.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel/ErrorPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PopupPanel/ErrorPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PopupPanel/ErrorPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.772549, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+text = "Error will go here"
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/AddNode" to="." method="_on_add_node_pressed" binds= [1, Vector2(20, 20), false]]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/ResetCounter" to="." method="_on_reset_counter_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/LoadJson" to="." method="_on_load_json_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/CreateJson" to="." method="_on_create_json_pressed"]
+[connection signal="connection_drag_started" from="VBoxContainer/PanelContainer2/GraphEdit" to="." method="_on_graph_edit_connection_drag_started"]
+[connection signal="connection_request" from="VBoxContainer/PanelContainer2/GraphEdit" to="." method="_on_graph_edit_connection_request"]
+[connection signal="connection_to_empty" from="VBoxContainer/PanelContainer2/GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]
+[connection signal="disconnection_request" from="VBoxContainer/PanelContainer2/GraphEdit" to="." method="_on_graph_edit_disconnection_request"]

@@ -11,12 +11,16 @@ var lastSelectedNode
 var lastSelectedPort
 var lastOptionButtonPosition: Vector2
 
+var errorMsg_NoFilename = "Please enter a name for your dialogue file!"
+var errorMsg_UnableToConnectResponseNode = "Cannot connect Response Node to Response Node"
+
 enum dialogue_types {EXIT, SAY, RESPONSE}
 const EXIT = 0
 const SAY = 1
 const RESPONSE = 2
 
 func _ready():
+	HideErrorPanel()
 	print_tree_pretty()
 	pass
 
@@ -26,10 +30,11 @@ func _process(delta):
 			option_button.queue_free()
 
 func _on_create_json_pressed():
-	if $FileName.text == null or $FileName.text == "":
-		printerr("Please enter a name for your dialogue file!")
+	if $VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/FileName.text.is_empty() :
+		printerr(errorMsg_NoFilename)
+		DisplayErrorPanel(errorMsg_NoFilename)
 		return
-	var graph = $GraphEdit
+	var graph = $VBoxContainer/PanelContainer2/GraphEdit
 	var connections = graph.get_connection_list()
 	var response_nodes: Array
 	var dict =  {}
@@ -80,7 +85,7 @@ func _on_create_json_pressed():
 	
 	## Save Dialogue into JSON
 	var json_string = json.stringify(dict, "\t")
-	var filename = str("res://",get_node("FileName").text, ".json")#
+	var filename = str("res://",get_node("VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/FileName").text, ".json")#
 	print(filename)
 	
 	var file := FileAccess.open(filename, FileAccess.WRITE)
@@ -100,7 +105,7 @@ func _on_add_node_pressed(node_type, offset_position, auto_connect):
 	type_button.item_selected.connect(self._on_node_type_change.bind(new_node)) 
 	
 	## Finish off by adding and incrementing
-	$GraphEdit.add_child(new_node)
+	$VBoxContainer/PanelContainer2/GraphEdit.add_child(new_node)
 	node_index += 1
 
 func _on_node_type_change(index, new_node):
@@ -124,7 +129,8 @@ func _on_newnode_type_item_selected(node_type, release_position):
 		node_index += 1
 	new_node.type = node_type
 	if lastSelectedNode.get_node('VBoxContainer/IDTypeSection/Type').get_selected_id() == 2 && node_type == 2:
-		printerr("Cannot connect Response Node to Response Node")
+		printerr(errorMsg_UnableToConnectResponseNode)
+		DisplayErrorPanel(errorMsg_UnableToConnectResponseNode)
 		option_button.queue_free()
 		pass
 	else:
@@ -132,8 +138,8 @@ func _on_newnode_type_item_selected(node_type, release_position):
 		new_node.position_offset.y += 100 * node_index
 		var close_button : Button = new_node.get_node("Close")
 		close_button.pressed.connect(Callable(self, "_on_node_closed"))
-		$GraphEdit.add_child(new_node)
-		$GraphEdit.connect_node(lastSelectedNode.name, lastSelectedPort, new_node.name, new_node.port)
+		$VBoxContainer/PanelContainer2/GraphEdit.add_child(new_node)
+		$VBoxContainer/PanelContainer2/GraphEdit.connect_node(lastSelectedNode.name, lastSelectedPort, new_node.name, new_node.port)
 		option_button.queue_free()
 
 func _on_graph_edit_connection_to_empty(from_node, from_port, release_position):
@@ -145,23 +151,23 @@ func _on_graph_edit_connection_to_empty(from_node, from_port, release_position):
 	option_button.select(-1)
 	option_button.text = "Type"
 	option_button.item_selected.connect(self._on_newnode_type_item_selected.bind(release_position))
-	$GraphEdit.add_child(option_button)
+	$VBoxContainer/PanelContainer2/GraphEdit.add_child(option_button)
 	option_button.grab_focus()
 
 func _on_graph_edit_connection_drag_started(from_node, from_port, is_output):
 	if is_output:
-		lastSelectedNode = $GraphEdit.get_node(from_node)
+		lastSelectedNode = $VBoxContainer/PanelContainer2/GraphEdit.get_node(from_node)
 		lastSelectedPort = from_port
 
 func _on_graph_edit_connection_request(from_node, from_port, to_node, to_port):
-	if $GraphEdit.get_node(str(from_node, '/VBoxContainer/IDTypeSection/Type')).get_selected_id() == 2 && $GraphEdit.get_node(str(to_node, '/VBoxContainer/IDTypeSection/Type')).get_selected_id() == 2:
+	if $VBoxContainer/PanelContainer2/GraphEdit.get_node(str(from_node, '/VBoxContainer/IDTypeSection/Type')).get_selected_id() == 2 && $VBoxContainer/PanelContainer2/GraphEdit.get_node(str(to_node, '/VBoxContainer/IDTypeSection/Type')).get_selected_id() == 2:
 		printerr("Cannot connect Response Node to Response Node")
 		pass
 	else:
-		$GraphEdit.connect_node(from_node, from_port, to_node, to_port)
+		$VBoxContainer/PanelContainer2/GraphEdit.connect_node(from_node, from_port, to_node, to_port)
 
 func _on_graph_edit_disconnection_request(from_node, from_port, to_node, to_port):
-	$GraphEdit.disconnect_node(from_node, from_port, to_node, to_port)
+	$VBoxContainer/PanelContainer2/GraphEdit.disconnect_node(from_node, from_port, to_node, to_port)
 
 
 func _on_reset_counter_pressed():
@@ -190,3 +196,14 @@ func read_json(json_file_path):
 	var parsed_json = json.parse_string(content)
 	print(parsed_json)
 	return parsed_json
+
+func DisplayErrorPanel( errorMessage):
+	$PopupPanel.show()#
+	$PopupPanel/ErrorPanel/MarginContainer/HBoxContainer/Label.text = errorMessage
+	await get_tree().create_timer(2.0).timeout
+	HideErrorPanel()
+	pass
+	
+func HideErrorPanel():
+	$PopupPanel.show()
+	pass
